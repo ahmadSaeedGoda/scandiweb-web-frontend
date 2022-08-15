@@ -6,6 +6,7 @@ import Dropdown from "../Stateless/DropdownList";
 import InputField from "../Stateless/InputField";
 import getBaseUrl from '../../services/serverUrlRetriever';
 import { useKeyBoardFormManipulator } from "../../helpers/formSubmitCancelUsingKeyboard";
+import { createProductService, isValidSKUService } from "../../services/product.service";
 import './AddProduct.css';
 
 const AddProduct = (props) => {
@@ -22,53 +23,20 @@ const AddProduct = (props) => {
     const [validationKeys, setValidationKeys] = useState([]);
     
     const [productTypes, setProductTypes] = useState([]);
-
     const [productTypesOptions, setProductTypesOptions] = useState([]);
 
-    function persist(userSubmittedData) { // FIXME replace to service file in services dir
-        let formBody = [];
-        for (let property in userSubmittedData) {
-          let encodedKey = encodeURIComponent(property);
-          let encodedValue = encodeURIComponent(userSubmittedData[property]);
-          formBody.push(encodedKey + "=" + encodedValue);
-        }
-        formBody = formBody.join("&");
-        
-        fetch(`${getBaseUrl()}/products`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: formBody
-        })
-        .then(response => response.json())
-        .then(redirectToProductsListingPage)
-        .catch(
-            error =>{
-                alert("Ops! Something went wrong, Please try again!");
-                console.error(error);
-            }
-        );
-    };
-
     let handleSubmit = async () => {
-        try {
-            let response = await fetch(`${getBaseUrl()}/products/${validatedFormData[productScheme.sku]}`, {
-                method: "GET"
-            });
+        let body = await isValidSKUService({
+            sku: validatedFormData[productScheme.sku]
+        });
 
-            let body = await response.json();
-
-            if (200 !== body.code || false === body.data) {
-                alert("The SKU is Already in use, Please try again!");
-            } else if (200 === body.code && true === body.data) {
-                persist(validatedFormData); //TODO we should make the useForm hook play with models better instead of random data obj!
-            } else {
-                alert("Ops! Something went wrong, Please try again!");
-            }
-        } catch (error) {
+        if (200 === body.code && false === body.data) {
+            alert("The SKU is Already in use, Please try again!");
+        } else if (200 === body.code && true === body.data) {
+            await createProductService({productData: validatedFormData}); //TODO we should make the useForm hook play with models better instead of random data obj!
+            redirectToProductsListingPage();
+        } else {
             alert("Ops! Something went wrong, Please try again!");
-            console.error(error);
         }
     };
 
@@ -150,62 +118,62 @@ const AddProduct = (props) => {
 
     // Product Type Switch shall trigger this hook to create, display, and validate the special attributes dynamically on the fly!
     useEffect(() => {
-            let productTypeSpecificAttributes = new Map();
-            let description = null;
-            let validationRules = [];
+        let productTypeSpecificAttributes = new Map();
+        let description = null;
+        let validationRules = [];
 
-            productTypes.forEach(
-                (productTypeModel) => {
-                    productTypeModel.attributes.forEach(
-                        (typeAttributeModel) => {
-                            if (productType === typeAttributeModel.productType) {
-                                validationRules.push(typeAttributeModel.attrName);
-                                productTypeSpecificAttributes[typeAttributeModel.attrName] =
-                                    <div className="block" key={typeAttributeModel.id}>
-                                        <InputField
-                                            label={`${typeAttributeModel.attrName} (${typeAttributeModel.measureUnit}):`}
-                                            name={typeAttributeModel.attrName}
-                                            id={typeAttributeModel.attrName.toLowerCase()}
-                                            placeholder={`Enter Product ${typeAttributeModel.attrName}`}
-                                            value={validatedFormData[typeAttributeModel.attrName]}
-                                            onChange={inputFieldChangeHandler(typeAttributeModel.attrName)}
-                                            className={formErrors[`${typeAttributeModel.attrName}`] ? "inputError" : "inputBox"}
-                                            key={typeAttributeModel.attrName}
-                                        />
-                                    </div>
-                                ;
-                                if (null === description) {
-                                    description = <p key={productTypeModel.id}>{productTypeModel.description}</p>;
-                                }
-                            } else {
-                                removeRule(typeAttributeModel.attrName);
+        productTypes.forEach(
+            (productTypeModel) => {
+                productTypeModel.attributes.forEach(
+                    (typeAttributeModel) => {
+                        if (productType === typeAttributeModel.productType) {
+                            validationRules.push(typeAttributeModel.attrName);
+                            productTypeSpecificAttributes[typeAttributeModel.attrName] =
+                                <div className="block" key={typeAttributeModel.id}>
+                                    <InputField
+                                        label={`${typeAttributeModel.attrName} (${typeAttributeModel.measureUnit}):`}
+                                        name={typeAttributeModel.attrName}
+                                        id={typeAttributeModel.attrName.toLowerCase()}
+                                        placeholder={`Enter Product ${typeAttributeModel.attrName}`}
+                                        value={validatedFormData[typeAttributeModel.attrName]}
+                                        onChange={inputFieldChangeHandler(typeAttributeModel.attrName)}
+                                        className={formErrors[`${typeAttributeModel.attrName}`] ? "inputError" : "inputBox"}
+                                        key={typeAttributeModel.attrName}
+                                    />
+                                </div>
+                            ;
+                            if (null === description) {
+                                description = <p key={productTypeModel.id}>{productTypeModel.description}</p>;
                             }
+                        } else {
+                            removeRule(typeAttributeModel.attrName);
                         }
-                    );
-                }
-            );
-            
-            for (const key of validationRules) {
-                setRule(
-                    key, 
-                    {
-                        required: {
-                            value: true,
-                            message: 'This field is required',
-                        },
-                        custom: {
-                            isValid: (value) => parseFloat(value),
-                            message: 'This field has to be only numbers!',
-                        },
                     }
                 );
             }
+        );
+        
+        for (const key of validationRules) {
+            setRule(
+                key, 
+                {
+                    required: {
+                        value: true,
+                        message: 'This field is required',
+                    },
+                    custom: {
+                        isValid: (value) => parseFloat(value),
+                        message: 'This field has to be only numbers!',
+                    },
+                }
+            );
+        }
 
-            setValidationKeys(validationRules);
+        setValidationKeys(validationRules);
 
-            productTypeSpecificAttributes['description'] = description;
-            
-            setSpecialAttribute(productTypeSpecificAttributes);
+        productTypeSpecificAttributes['description'] = description;
+        
+        setSpecialAttribute(productTypeSpecificAttributes);
     }, [productType]);
 
     // just a function to generate special attributes with errors notices respectively if any, then be displayed when called in the return section.
