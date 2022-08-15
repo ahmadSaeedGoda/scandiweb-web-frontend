@@ -5,12 +5,10 @@ import ProductValidationScheme from "../../helpers/validators/ProductValidationS
 import Dropdown from "../Stateless/DropdownList";
 import InputField from "../Stateless/InputField";
 import getBaseUrl from '../../services/serverUrlRetriever';
-import './AddProduct.css';
-import { productTypesResponseToProductTypeModelsArrayTransformer } from "../../transformers/productTypesResponseToProductTypeModelsArray.transformer";
-import { productTypesResponseToDropdownOptionsListTransformer } from "../../transformers/productTypesResponseToDropdownOptionsList.transformer";
 import { useKeyBoardFormManipulator } from "../../helpers/formSubmitCancelUsingKeyboard";
+import './AddProduct.css';
 
-const AddProduct = () => {
+const AddProduct = (props) => {
 
     let navigate = useNavigate();
     
@@ -19,12 +17,14 @@ const AddProduct = () => {
         navigate(rootPath);
     };
 
-    const [productTypes, setProductTypes] = useState([]);
     const [productType, setProductType] = useState('');
-    const [productTypesOptions, setProductTypesOptions] = useState([]);
     const [specialAttribute, setSpecialAttribute] = useState({});
     const [validationKeys, setValidationKeys] = useState([]);
     
+    const [productTypes, setProductTypes] = useState([]);
+
+    const [productTypesOptions, setProductTypesOptions] = useState([]);
+
     function persist(userSubmittedData) { // FIXME replace to service file in services dir
         let formBody = [];
         for (let property in userSubmittedData) {
@@ -120,69 +120,36 @@ const AddProduct = () => {
         validationsScheme: productScheme.currentScheme,
         onSubmit: handleSubmit
     });
-
-    // because react 18 latest version renders the component twice when useEffect is invoked to stress test it in development we need to check
-    // for more info visit https://beta.reactjs.org/learn/synchronizing-with-effects#how-to-handle-the-effect-firing-twice-in-development
-    const ignoreTypesFetch = useRef(false);
     
-    useEffect(() => {
-        // if (false === ignoreTypesFetch.current || 'development' !== process.env.NODE_ENV) {
-            (async () => {
-                const response = await fetch(`${getBaseUrl()}/products/types`, {
-                    method: 'GET'
-                });
-                
-                let jsonResponse = await response.json();
-                
-                // Data modeling before storing in state for maintainability and reuse. As components should be backend keys/data agnostic!
-                setProductTypes(
-                    productTypesResponseToProductTypeModelsArrayTransformer(jsonResponse.data)
-                );
-
-                setProductTypesOptions(
-                    productTypesResponseToDropdownOptionsListTransformer(
-                        jsonResponse.data
-                    )
-                );
-            })();
-        // }
-        // return () => ignoreTypesFetch.current = true;
-    }, []);
-
-    // const ignoreAddingListeners = useRef(false);
-    
-    // on first render we need to add event listner to submit the form on Enter key press, or cancel on esc key press
-    // TODO Refactor to separate custom hook or extract to function!
-    useEffect(() => {
-        const {registerListeners, removeListeners} = useKeyBoardFormManipulator({
-            keyboardKeysScheme: {
-                Enter: {
-                    handlerID: "submit_add_product_form"
-                },
-                NumpadEnter: {
-                    handlerID: "submit_add_product_form"
-                },
-                Escape: {
-                    handlerID: "cancel_add_product_form"
-                }
+    const {registerListeners, removeListeners} = useKeyBoardFormManipulator({
+        keyboardKeysScheme: {
+            Enter: {
+                handlerID: "submit_add_product_form"
+            },
+            NumpadEnter: {
+                handlerID: "submit_add_product_form"
+            },
+            Escape: {
+                handlerID: "cancel_add_product_form"
             }
-        });
+        }
+    });
 
-        // if (false === ignoreAddingListeners.current || 'development' !== process.env.NODE_ENV) {
-            registerListeners();
-        // }
+    useEffect(() => {
+
+        registerListeners();
+
+        setProductTypes(props.productTypes);
+
+        setProductTypesOptions(props.productTypesOptions);
 
         return () => {
             removeListeners();
-            // ignoreAddingListeners.current = true;
         }
     }, []);
 
-    // const ignoreAddingSpecialAttrs = useRef(false);
-    
     // Product Type Switch shall trigger this hook to create, display, and validate the special attributes dynamically on the fly!
     useEffect(() => {
-        // if (false === ignoreAddingSpecialAttrs.current || 'development' !== process.env.NODE_ENV) {
             let productTypeSpecificAttributes = new Map();
             let description = null;
             let validationRules = [];
@@ -239,7 +206,6 @@ const AddProduct = () => {
             productTypeSpecificAttributes['description'] = description;
             
             setSpecialAttribute(productTypeSpecificAttributes);
-        // }
     }, [productType]);
 
     // just a function to generate special attributes with errors notices respectively if any, then be displayed when called in the return section.
