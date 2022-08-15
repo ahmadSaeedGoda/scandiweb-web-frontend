@@ -202,7 +202,7 @@ const AddProduct = () => {
                                             placeholder={`Enter Product ${typeAttributeModel.attrName}`}
                                             value={validatedFormData[typeAttributeModel.attrName]}
                                             onChange={inputFieldChangeHandler(typeAttributeModel.attrName)}
-                                            className={formErrors[`${typeAttributeModel.attrName}`] ? "input.error inputBox" : "inputBox"}
+                                            className={formErrors[`${typeAttributeModel.attrName}`] ? "inputError" : "inputBox"}
                                             key={typeAttributeModel.attrName}
                                         />
                                     </div>
@@ -249,7 +249,7 @@ const AddProduct = () => {
             for (const key of validationKeys) {
                 if (key === attrName) {
                     attributes.push(specialAttribute[attrName]);
-                    attributes.push(<p className="error" key={key}>{formErrors[key]}</p>);
+                    attributes.push(<p className="validationError" key={key}>{formErrors[key]}</p>);
                 }
             }
         }
@@ -278,9 +278,9 @@ const AddProduct = () => {
                         value={validatedFormData[productScheme.sku] || ''}
                         onChange={ inputFieldChangeHandler(productScheme.sku) }
                         autoFocus={true}
-                        className={formErrors[productScheme.sku] ? "input.error inputBox" : "inputBox"}
+                        className={formErrors[productScheme.sku] ? "inputError" : "inputBox"}
                     />
-                    {formErrors[productScheme.sku] && <p className="error">{formErrors[productScheme.sku]}</p>}
+                    {formErrors[productScheme.sku] && <p className="validationError">{formErrors[productScheme.sku]}</p>}
                 </div>
 
                 <div className="block">
@@ -292,9 +292,9 @@ const AddProduct = () => {
                         placeholder={`Enter Product ${productScheme.name}`}
                         onChange={ inputFieldChangeHandler(productScheme.name) }
                         value={validatedFormData[productScheme.name] || ''}
-                        className={formErrors[productScheme.name] ? "input.error inputBox" : "inputBox"}
+                        className={formErrors[productScheme.name] ? "inputError" : "inputBox"}
                     />
-                    {formErrors[productScheme.name] && <p className="error">{formErrors[productScheme.name]}</p>}
+                    {formErrors[productScheme.name] && <p className="validationError">{formErrors[productScheme.name]}</p>}
                 </div>
 
                 <div className="block">
@@ -307,9 +307,9 @@ const AddProduct = () => {
                         placeholder={`Enter Product ${productScheme.price} $$`}
                         value={validatedFormData[productScheme.price] || ''}
                         onChange={ inputFieldChangeHandler(productScheme.price, (value) => parseFloat(value)) }
-                        className={formErrors[productScheme.price] ? "input.error inputBox" : "inputBox"}
+                        className={formErrors[productScheme.price] ? "inputError" : "inputBox"}
                     />
-                    {formErrors[productScheme.price] && <p className="error">{formErrors[productScheme.price]}</p>}
+                    {formErrors[productScheme.price] && <p className="validationError">{formErrors[productScheme.price]}</p>}
                 </div>
 
                 <div className="block">
@@ -325,10 +325,10 @@ const AddProduct = () => {
                             value={validatedFormData[productScheme.productType]}
                             onChange={ inputFieldChangeHandler(productScheme.productType) }
                             onChangeDo={ (e) => setProductType(e.target.value) }
-                            className={formErrors[productScheme.productType] ? "input.error inputBox" : "inputBox"}
+                            className={formErrors[productScheme.productType] ? "inputError" : "inputBox"}
                         />
                     }
-                    { formErrors[productScheme.productType] && <p className="error">{formErrors[productScheme.productType]}</p> }
+                    { formErrors[productScheme.productType] && <p className="validationError">{formErrors[productScheme.productType]}</p> }
                 </div>
 
                 <div className="block">

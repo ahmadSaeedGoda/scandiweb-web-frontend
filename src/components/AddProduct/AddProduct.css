@@ -36,11 +36,23 @@ button {
     color: red;
 }
 
-.error {
+.validationError {
     color: red;
     font-size: 13px;
 }
 
-input.error {
-    box-shadow: 0 0 3px #CC0000;
+.inputBox {
+    padding: 7px;
+    display: block;
+    border: 1px solid skyblue;
+    margin: 20px;
+    width: 300px;
+}
+
+.inputError {
+    box-shadow: 0 0 13px red;
+    padding: 7px;
+    display: block;
+    margin: 20px;
+    width: 300px;
 }
