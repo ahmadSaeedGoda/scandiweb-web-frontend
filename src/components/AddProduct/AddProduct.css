@@ -1,0 +1,46 @@
+button {
+    display: block;
+    margin-left: auto;
+}
+.block{
+    display: grid;
+}
+
+.nav {
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    margin-right: -50%;
+}
+
+.nav button {
+    float: right;
+    margin-right: 1%;
+}
+
+.btn {
+    width: 130px;
+    height: 35px;
+    font-size: 14px;
+    border-radius: 35px;
+    background-color: #2d343e;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    position: relative;
+    -webkit-transition: background-color .3s ease;
+    transition: background-color .3s ease;
+    overflow: hidden;
+}
+
+.required {
+    color: red;
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+}
+
+input.error {
+    box-shadow: 0 0 3px #CC0000;
+}

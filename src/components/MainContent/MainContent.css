@@ -1,0 +1,11 @@
+.empty_main_content {
+    height:100vh;
+    /* padding: 33% 0% 33% 0%; */
+    vertical-align: middle;
+    text-align: center;
+    display:inline-block;
+}
+
+.empty_main_content h1 {
+    margin: 7%;
+}

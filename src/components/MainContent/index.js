@@ -1,0 +1,153 @@
+import React, { useState, useEffect, useRef } from 'react';
+import Processing from '../Stateless/Processing';
+import Header from '../Stateless/Header';
+import ProductList from '../Stateless/ProductList';
+import Footer from '../Stateless/Footer';
+import getBaseUrl from '../../services/serverUrlRetriever';
+import './MainContent.css'
+import { productsResponseToProductModelsArrayTransformer } from '../../transformers/productsResponseToProductModelsArray.transformer';
+
+
+const MainContent = () => {
+
+    const [productsArray, setProductsArray] = useState([]);
+    const [isEmptyProductList, setIsEmptyProductList] = useState(false);
+    const [isProcessing, setProcessing] = useState(false);
+    const [destroyableProductsIDs, setDestroyableProductsIDs] = useState([]);
+
+    const handleOnCheckBoxChange = (productID) => {
+        if (false === destroyableProductsIDs.includes(productID)) {
+            destroyableProductsIDs.push(productID);
+        } else {
+            let productIdIndex = destroyableProductsIDs.indexOf(productID);
+            if (productIdIndex !== -1) {
+                destroyableProductsIDs.splice(productIdIndex, 1);
+            }
+        }
+        setDestroyableProductsIDs(destroyableProductsIDs);
+    };
+
+    async function handleMassDelete() {
+        setProcessing(true);
+
+        const destroyableIds = destroyableProductsIDs;
+
+        if (0 === destroyableIds.length) {
+            return setProcessing(false);
+        }
+        let requestBody = {destroyableProductsIDs: destroyableIds.join()};
+        
+        try {
+            const response = await fetch(`${getBaseUrl()}/products`, {
+                method: 'DELETE',
+                headers : { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            let body = await response.json();
+
+            if (200 !== body.code || false === body.data) {
+                alert("Ops! Something went wrong, Please try again!");
+            } else if (200 === body.code && true === body.data) {
+                setProductsArray(
+                    productsArray
+                    .filter(
+                        entry => destroyableIds.indexOf(entry.id) === -1
+                    )
+                );
+                setProcessing(false);
+            } else {
+                alert("Ops! Something went wrong, Please try again!");
+            }
+
+        } catch (error) {
+            alert("Ops! Something went wrong, Please try again!");
+            console.error(error);
+        }
+    }
+
+    const componentMounted = useRef(false);
+    
+    useEffect(() => {
+        // because react 18 latest version renders the component twice when useEffect is invoked to stress test it in development we need to check
+        // for more info visit https://beta.reactjs.org/learn/synchronizing-with-effects#how-to-handle-the-effect-firing-twice-in-development
+        // if (true === componentMounted.current || 'development' !== process.env.NODE_ENV) {
+            (async () => {
+
+                setProcessing(true);
+
+                try {
+                        
+                    const response = await fetch(`${getBaseUrl()}/products`, {
+                        method: 'GET',
+                        headers : { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    let body = await response.json();
+
+                    setProductsArray(
+                        productsResponseToProductModelsArrayTransformer(body.data)
+                    );
+
+                    if (0 === body.data.length) {
+                        setIsEmptyProductList(true);
+                    }
+        
+                    if (200 !== body.code || false === body.data) {
+                        alert("Ops! Something went wrong, Please try again!");
+                    } else if (200 === body.code && true === body.data) {
+                        setProcessing(false);
+                    }
+                } catch (error) {
+                    alert("Ops! Something went wrong, Please try again!");
+                    console.error(error);
+                } finally {
+                    setProcessing(false);
+                }
+            })();
+        // }
+
+        // return () => componentMounted.current = true;
+    }, []);
+
+    if (isEmptyProductList) {
+        return (
+            <div>
+                <div className="container">
+                    <Header />
+                    <div className="empty_main_content">
+                        <h1>No Products Found Yet!</h1>
+                        <h1>Try To Add Products Though!</h1>
+                    </div>
+                    <Footer />
+                </div>
+            </div>
+        );
+    }
+
+    if (isProcessing) {
+        return (<Processing />);
+    }
+
+    return (
+        <div className="container">
+            <Header
+                handleMassDelete={handleMassDelete}
+            />
+            <div className="main_content">
+                <h3>ScandiWeb</h3>
+                <ProductList
+                    productList={productsArray}
+                    handleOnCheckBoxChange={handleOnCheckBoxChange}
+                />
+            </div>
+            <Footer />
+      </div>
+    )
+}
+export default MainContent;
