@@ -210,21 +210,6 @@ nav .search .fa + .fa {
 }
 /*# sourceMappingURL=App.css.map */
 
-.delete-checkbox {
-  /* display: inline-block; */
-  margin: 5px 5px;
-  width: 200px;
-  padding: 5;
-  float:left;
-}
 hr {
   margin: 2%;
-}
-
-.inputBox {
-  padding: 7px;
-  display: block;
-  border: 1px solid skyblue;
-  margin: 20px;
-  width: 300px;
 }
