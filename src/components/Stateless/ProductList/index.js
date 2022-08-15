@@ -8,7 +8,7 @@ const ProductList = ({productList, handleOnCheckBoxChange}) => {
         productModel => 
                 <div className="card" key={productModel.id} >
                     <InputField
-                        className='delete-checkbox'
+                        className='.delete-checkbox' // this is as per requirements, for automated testing.
                         type="checkbox"
                         name={productModel.sku} 
                         id={productModel.id}

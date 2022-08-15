@@ -198,7 +198,7 @@ const AddProduct = () => {
                                         <InputField
                                             label={`${typeAttributeModel.attrName} (${typeAttributeModel.measureUnit}):`}
                                             name={typeAttributeModel.attrName}
-                                            id={typeAttributeModel.attrName}
+                                            id={typeAttributeModel.attrName.toLowerCase()}
                                             placeholder={`Enter Product ${typeAttributeModel.attrName}`}
                                             value={validatedFormData[typeAttributeModel.attrName]}
                                             onChange={inputFieldChangeHandler(typeAttributeModel.attrName)}
@@ -258,7 +258,7 @@ const AddProduct = () => {
 
     return(
         <div className="product">
-            <form id="add_product_form" method="GET" onSubmit={formSubmitHandler}>
+            <form id="product_form" method="GET" onSubmit={formSubmitHandler}>
                 <div className="nav">
                     <h1>Add Product</h1>
                     <button className="btn" id="cancel_add_product_form" onClick={redirectToProductsListingPage}>Cancel</button>
@@ -273,7 +273,7 @@ const AddProduct = () => {
                         label={`${productScheme.sku}:`}
                         labelRequired={true}
                         name={productScheme.sku}
-                        id={productScheme.sku}
+                        id='sku' // this is as per requirements, for automated testing.
                         placeholder={`Enter Product ${productScheme.sku}`}
                         value={validatedFormData[productScheme.sku] || ''}
                         onChange={ inputFieldChangeHandler(productScheme.sku) }
@@ -288,7 +288,7 @@ const AddProduct = () => {
                         label={`${productScheme.name}:`}
                         labelRequired={true}
                         name={productScheme.name}
-                        id={productScheme.name}
+                        id='name' // this is as per requirements, for automated testing.
                         placeholder={`Enter Product ${productScheme.name}`}
                         onChange={ inputFieldChangeHandler(productScheme.name) }
                         value={validatedFormData[productScheme.name] || ''}
@@ -303,7 +303,7 @@ const AddProduct = () => {
                         labelRequired={true}
                         type="number"
                         name={productScheme.price}
-                        id={productScheme.price}
+                        id='price' // this is as per requirements, for automated testing.
                         placeholder={`Enter Product ${productScheme.price} $$`}
                         value={validatedFormData[productScheme.price] || ''}
                         onChange={ inputFieldChangeHandler(productScheme.price, (value) => parseFloat(value)) }
