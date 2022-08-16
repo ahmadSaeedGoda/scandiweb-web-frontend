@@ -37,11 +37,11 @@ export default function App () {
 		<Routes>
 			<Route path="/" element={ <MainContent /> } />
 
-			<Route path="/add-product" 
-				element={ 
-					<AddProduct productTypes={productTypes} productTypesOptions={productTypesOptions} /> 
-				} 
+			<Route
+				path="/add-product"
+				element={<AddProduct productTypes={productTypes} productTypesOptions={productTypesOptions} />}
 			/>
+
 			<Route path="*" element={<NoContent />} />
 		</Routes>
 	);

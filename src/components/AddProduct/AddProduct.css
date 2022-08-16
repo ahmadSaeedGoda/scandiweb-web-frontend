@@ -1,7 +1,16 @@
+.product {
+    margin: 1% 1% 0% 2%;
+}
+
+#product_form {
+    color: rgba(255, 255, 255, .5);
+}
+
 button {
     display: block;
     margin-left: auto;
 }
+
 .block{
     display: grid;
 }
@@ -11,11 +20,13 @@ button {
     display: inline-block;
     width: 100%;
     margin-right: -50%;
+    color: #e04f4f;
 }
 
 .nav button {
     float: right;
     margin-right: 1%;
+    background-color: #10132C;
 }
 
 .btn {
@@ -37,7 +48,7 @@ button {
 }
 
 .validationError {
-    color: red;
+    color: #f37c7b;
     font-size: 13px;
 }
 
@@ -50,7 +61,7 @@ button {
 }
 
 .inputError {
-    box-shadow: 0 0 13px red;
+    box-shadow: 0 0 2px red;
     padding: 7px;
     display: block;
     margin: 20px;

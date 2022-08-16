@@ -7,6 +7,7 @@ import InputField from "../Stateless/InputField";
 import getBaseUrl from '../../services/serverUrlRetriever';
 import { useKeyBoardFormManipulator } from "../../helpers/formSubmitCancelUsingKeyboard";
 import { createProductService, isValidSKUService } from "../../services/product.service";
+import Footer from "../Stateless/Footer";
 import './AddProduct.css';
 
 const AddProduct = (props) => {
@@ -69,8 +70,8 @@ const AddProduct = (props) => {
                 message: 'This field is required',
             },
             custom: {
-                isValid: (value) => parseFloat(value),
-                message: 'Prices have to be Decimal numbers!',
+                isValid: (value) => parseFloat(value) && value > 0,
+                message: 'Prices have to be Decimal numbers Greater than Zero!',
             },
         },
         productType: {
@@ -134,7 +135,7 @@ const AddProduct = (props) => {
                                         label={`${typeAttributeModel.attrName} (${typeAttributeModel.measureUnit}):`}
                                         name={typeAttributeModel.attrName}
                                         id={typeAttributeModel.attrName.toLowerCase()}
-                                        placeholder={`Enter Product ${typeAttributeModel.attrName}`}
+                                        placeholder={`Enter Product ${typeAttributeModel.attrName}*`}
                                         value={validatedFormData[typeAttributeModel.attrName]}
                                         onChange={inputFieldChangeHandler(typeAttributeModel.attrName)}
                                         className={formErrors[`${typeAttributeModel.attrName}`] ? "inputError" : "inputBox"}
@@ -191,7 +192,7 @@ const AddProduct = (props) => {
     };
 
     return(
-        <div className="product">
+        <div className="container">
             <form id="product_form" method="GET" onSubmit={formSubmitHandler}>
                 <div className="nav">
                     <h1>Add Product</h1>
@@ -208,7 +209,7 @@ const AddProduct = (props) => {
                         labelRequired={true}
                         name={productScheme.sku}
                         id='sku' // this is as per requirements, for automated testing.
-                        placeholder={`Enter Product ${productScheme.sku}`}
+                        placeholder={`Enter Product ${productScheme.sku}*`}
                         value={validatedFormData[productScheme.sku] || ''}
                         onChange={ inputFieldChangeHandler(productScheme.sku) }
                         autoFocus={true}
@@ -223,7 +224,7 @@ const AddProduct = (props) => {
                         labelRequired={true}
                         name={productScheme.name}
                         id='name' // this is as per requirements, for automated testing.
-                        placeholder={`Enter Product ${productScheme.name}`}
+                        placeholder={`Enter Product ${productScheme.name}*`}
                         onChange={ inputFieldChangeHandler(productScheme.name) }
                         value={validatedFormData[productScheme.name] || ''}
                         className={formErrors[productScheme.name] ? "inputError" : "inputBox"}
@@ -238,7 +239,7 @@ const AddProduct = (props) => {
                         type="number"
                         name={productScheme.price}
                         id='price' // this is as per requirements, for automated testing.
-                        placeholder={`Enter Product ${productScheme.price} $$`}
+                        placeholder={`Enter Product ${productScheme.price} $$*`}
                         value={validatedFormData[productScheme.price] || ''}
                         onChange={ inputFieldChangeHandler(productScheme.price, (value) => parseFloat(value)) }
                         className={formErrors[productScheme.price] ? "inputError" : "inputBox"}
@@ -269,6 +270,7 @@ const AddProduct = (props) => {
                     {displaySpecialAttributes()}
                 </div>
             </form>
+            <Footer />
         </div>
     );
     
