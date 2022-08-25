@@ -12,7 +12,8 @@ button {
 }
 
 .block{
-    display: grid;
+    display: table;
+    width: 100%
 }
 
 .nav {
@@ -52,18 +53,29 @@ button {
     font-size: 13px;
 }
 
+label {
+    display: table-cell;
+    width: 15%;
+    white-space: nowrap;
+    cursor: pointer;
+}
+  
+.inline_input {
+    padding: 0 4px 0 6px;
+}
+
 .inputBox {
+    display: table-cell;
     padding: 7px;
-    display: block;
     border: 1px solid skyblue;
     margin: 20px;
-    width: 300px;
+    width: 40%;
 }
 
 .inputError {
-    box-shadow: 0 0 2px red;
+    display: table-cell;
     padding: 7px;
-    display: block;
+    box-shadow: 0 0 2px red;
     margin: 20px;
-    width: 300px;
+    width: 40%;
 }

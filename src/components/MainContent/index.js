@@ -8,7 +8,6 @@ import getBaseUrl from '../../services/serverUrlRetriever';
 import { productsResponseToProductModelsArrayTransformer } from '../../transformers/productsResponseToProductModelsArray.transformer';
 import './MainContent.css'
 
-
 const MainContent = () => {
 
     const [productsArray, setProductsArray] = useState([]);
@@ -52,12 +51,14 @@ const MainContent = () => {
             if (200 !== body.code || false === body.data) {
                 alert("Ops! Something went wrong, Please try again!");
             } else if (200 === body.code && true === body.data) {
-                setProductsArray(
-                    productsArray
-                    .filter(
-                        entry => destroyableIds.indexOf(entry.id) === -1
-                    )
+                const currentProducts = productsArray.filter(
+                    entry => destroyableIds.indexOf(entry.id) === -1
                 );
+                if (0 < currentProducts.length) {
+                    setProductsArray(currentProducts);
+                } else {
+                    setIsEmptyProductList(true);
+                }
                 setProcessing(false);
             } else {
                 alert("Ops! Something went wrong, Please try again!");
@@ -139,7 +140,6 @@ const MainContent = () => {
                 handleMassDelete={handleMassDelete}
             />
             <div className="main_content">
-                <h3 className='background-headline'>ScandiWeb</h3>
                 <ProductList
                     productList={productsArray}
                     handleOnCheckBoxChange={handleOnCheckBoxChange}

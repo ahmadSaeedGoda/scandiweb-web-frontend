@@ -6,7 +6,7 @@ const getBaseUrl = () => {
             break;
         
         case 'development':
-            url = 'https://www.scandiweb.local/api/v1';
+            url = 'http://www.scandiweb.local/api/v1';
             break;
 
         default:

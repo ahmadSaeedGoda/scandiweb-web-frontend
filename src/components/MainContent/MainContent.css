@@ -108,6 +108,7 @@ nav, nav ul, .main_content, .main_content .card, .main_content .card .card_heade
     -webkit-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
     margin-bottom: 50px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
 }
   
 .main_content .card .card_img {
@@ -182,6 +183,7 @@ nav, nav ul, .main_content, .main_content .card, .main_content .card .card_heade
 }
 
 .main_content .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     background-color: #909AF2;
     -webkit-transform: scale(1.1);
             transform: scale(1.1);
@@ -190,10 +192,4 @@ nav, nav ul, .main_content, .main_content .card, .main_content .card .card_heade
 
 .main_content .card .card_header .price {
     color: #FDD466;
-}
-
-.background-headline {
-    color: rgba(255,255,255,.5);
-    position: absolute;
-    font-size: 13.5vw;
 }
