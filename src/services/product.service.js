@@ -28,7 +28,7 @@ export async function createProductService ({ productData }) {
 
 export async function isValidSKUService ({ sku }) {
     try {
-        const response = await fetch(`${getBaseUrl()}/products/${sku}`, { method: "GET" });
+        const response = await fetch(`${getBaseUrl()}/products/sku/isValid/${sku}`, { method: "GET" });
         return await response.json();
     } catch (error) {
         alert("Ops! Something went wrong, Please try again!");

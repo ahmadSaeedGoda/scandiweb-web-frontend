@@ -15,6 +15,12 @@ export const productRecordToProductModelTransformer = productRecord =>
                 attrName: record.AttributeName,
                 measureUnit: record.AttributeMeasureUnit,
                 productType: record.FK_ProductType,
+                backendType: record.BackendDataType,
+                inputType: record.FrontendInputType,
+                label: record.FrontendLabel,
+                isRequired: record.IsRequired,
+                defaultValue: record.DefaultValue,
+                note: record.Note,
             })
         ),
         attributesValues: productRecord.attributes_values.map(

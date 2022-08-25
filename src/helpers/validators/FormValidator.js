@@ -1,4 +1,4 @@
-export const SchemeValidator = ({ validationsScheme, data }) => {
+export const SchemeValidator = async ({ validationsScheme, data }) => {
 
     let valid = true;
     const newErrors = {};
@@ -20,13 +20,22 @@ export const SchemeValidator = ({ validationsScheme, data }) => {
             }
 
             const custom = validationRule?.custom;
-            if (custom?.isValid && !custom.isValid(value)) {
-                valid = false;
-                newErrors[key] = custom.message;
+            if (custom?.isValid) {
+                if (custom.isValid.constructor.name === "AsyncFunction" ) {
+                    if (false === await custom.isValid(value)) {
+                        valid = false;
+                        newErrors[key] = custom.message;
+                    }
+                } else {
+                    if (!custom.isValid(value)) {
+                        valid = false;
+                        newErrors[key] = custom.message;
+                    }
+                }
             }
         }
     }
-    
+
     if (false === valid) {
         return newErrors;
     }

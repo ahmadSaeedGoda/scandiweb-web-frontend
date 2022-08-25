@@ -5,7 +5,7 @@ export const useForm = ({ initialValues, validationsScheme, onSubmit }) => {
 
     const [data, setData] = useState((initialValues || {}));
     const [errors, setErrors] = useState({});
-    const [dynamicValidationScheme, setDynamicValidationScheme] = useState((validationsScheme || {}));
+    const [dynamicValidationScheme, setDynamicValidationScheme] = useState(validationsScheme);
 
     const getValidationScheme = () => dynamicValidationScheme;
 
@@ -36,7 +36,7 @@ export const useForm = ({ initialValues, validationsScheme, onSubmit }) => {
             null !== dynamicValidationScheme &&
             undefined !== dynamicValidationScheme
         ) {
-            const validationErrors = SchemeValidator({ validationsScheme: dynamicValidationScheme, data: data });
+            const validationErrors = await SchemeValidator({ validationsScheme: dynamicValidationScheme, data: data });
 
             if (true !== validationErrors) {
                 setErrors(validationErrors);

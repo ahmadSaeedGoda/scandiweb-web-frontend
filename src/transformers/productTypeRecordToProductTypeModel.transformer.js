@@ -12,6 +12,12 @@ export const productTypeRecordToProductTypeModelTransformer = productTypeRecord 
                     attrName: typeAttributeRecord.AttributeName,
                     measureUnit: typeAttributeRecord.AttributeMeasureUnit,
                     productType: typeAttributeRecord.FK_ProductType,
+                    backendType: typeAttributeRecord.BackendDataType,
+                    inputType: typeAttributeRecord.FrontendInputType,
+                    label: typeAttributeRecord.FrontendLabel,
+                    isRequired: typeAttributeRecord.IsRequired,
+                    defaultValue: typeAttributeRecord.DefaultValue,
+                    note: typeAttributeRecord.Note,
                 })
         )
     });
