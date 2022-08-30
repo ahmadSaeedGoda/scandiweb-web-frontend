@@ -2,15 +2,15 @@ const getBaseUrl = () => {
     let url;
     switch(process.env.NODE_ENV) {
         case 'production':
-            url = 'https://www.scandiweb.local/api/v1'; //TODO set later on after backend deploy
+            url = process.env.REACT_APP_PRODUCTION_SERVER_BASEURL;
             break;
         
         case 'development':
-            url = 'http://www.scandiweb.local/api/v1';
+            url = process.env.REACT_APP_DEV_SERVER_BASEURL;
             break;
 
         default:
-            url = 'https://www.scandiweb.local/api/v1';
+            url = process.env.REACT_APP_DEFAULT_SERVER_BASEURL;
             break;
     }
 
