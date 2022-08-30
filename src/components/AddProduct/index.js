@@ -164,7 +164,6 @@ const AddProduct = () => {
         }
 
         let productTypeSpecificAttributes = {};
-        let description = null;
         let validationKeys = [];
         let selectedTypeModel = arrayproductTypes.find(type => type.id === selectedProductType);
 
@@ -173,7 +172,7 @@ const AddProduct = () => {
                 typeAttributeModel => {
                     let attrName = typeAttributeModel.attrName;
                     validationKeys.push(attrName);
-                    productTypeSpecificAttributes[`${attrName}`] =
+                    productTypeSpecificAttributes[attrName] =
                         <InputField
                             label={`${typeAttributeModel.label} (${typeAttributeModel.measureUnit})`}
                             labelRequired={(1 == typeAttributeModel.isRequired)? true : false}
@@ -183,20 +182,20 @@ const AddProduct = () => {
                             placeholder={`Enter Product ${typeAttributeModel.label}*`}
                             value={validatedFormData[attrName]}
                             onChange={inputFieldChangeHandler(attrName)}
-                            className={'inputBox'}
-                        />;
+                            className={formErrors[attrName] ? "inputError" : "inputBox"}
+                        />
+                        ;
                     // set required rules according to backend
                     // in case of any other rules rather than required, the backend should specify. like pattern|custom
                     if (1 === typeAttributeModel.isRequired) {
                         setRule(attrName, {required: {value: true, message: 'This field is required'}});
                     }
-                    description = <p key={selectedTypeModel.id}>{selectedTypeModel.description}</p>;
                 }
             );
 
             setValidationKeys(validationKeys);
             
-            productTypeSpecificAttributes['description'] = description;
+            productTypeSpecificAttributes['description'] = <p key={selectedTypeModel.id}>{selectedTypeModel.description}</p>;
             
             setSpecialAttribute(productTypeSpecificAttributes);
         }
@@ -245,7 +244,7 @@ const AddProduct = () => {
                         autoFocus={true}
                         className={formErrors[productScheme.sku] ? "inputError" : "inputBox"}
                     />
-                    {formErrors[productScheme.sku] && <p className="validationError" id="sku">{formErrors[productScheme.sku]}</p>}
+                    {formErrors[productScheme.sku] && <p className="validationError">{formErrors[productScheme.sku]}</p>}
                 </div>
 
                 <div className="block">
