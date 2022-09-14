@@ -1,6 +1,8 @@
 export const useKeyBoardFormManipulator = ({ keyboardKeysScheme }) => {
 
     const registeredListeners = [];
+    
+    const controller = new AbortController();
 
     const registerListeners = () => {
         for (const keyboardKey in keyboardKeysScheme) {
@@ -13,7 +15,7 @@ export const useKeyBoardFormManipulator = ({ keyboardKeysScheme }) => {
                     }
                 };
 
-                document.addEventListener("keydown", listener);
+                document.addEventListener("keydown", listener, { signal: controller.signal } );
 
                 // important to keep a reference for each registered listener to be able to remove them when not anymore needed
                 registeredListeners.push(listener);
@@ -22,14 +24,7 @@ export const useKeyBoardFormManipulator = ({ keyboardKeysScheme }) => {
     };
 
     // We need to allow the developer/userOfthisFunc remove listeners when needed to avoid memory leaks
-    const removeListeners = () => {
-        for (const listener of registeredListeners) {
-            if (Object.hasOwnProperty.call(registeredListeners, listener)) {
-                console.log('listener= ', listener);
-                return document.removeEventListener("keydown", listener);
-            }
-        }
-    };
+    const removeListeners = () => registeredListeners.forEach( () => controller.abort() );
 
     return {
         registerListeners: registerListeners,
