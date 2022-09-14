@@ -8,6 +8,7 @@ TODO replace it in more appropriate folder and refactor it to avoid complexity!
 export const productAttributesGenerator = productModel => {
     let returnString = '';
     let counter = 0;
+    let isLabelDisplayed = false;
 
     productModel.attributes.map(
 
@@ -20,7 +21,12 @@ export const productAttributesGenerator = productModel => {
                 if (attrValueModel.attrID === productAttributeModel.id) {
                     counter += 1;
                     if (counter < productModel.attributes.length) {
-                        attributeValue += attrValueModel.attrValue + 'x';
+                        if (false === isLabelDisplayed) {
+                            attributeValue += `Dimension: ${attrValueModel.attrValue}x`;
+                            isLabelDisplayed = true;
+                        } else {
+                            attributeValue += `${attrValueModel.attrValue}x`;
+                        }
                     } else {
                         attributeValue += attrValueModel.attrValue;
                     }
@@ -34,7 +40,7 @@ export const productAttributesGenerator = productModel => {
                     returnString += `${attributeValue} ${productAttributeModel.measureUnit}`;
                 }
             } else {
-                returnString += `${productAttributeModel.attrName}: ${attributeValue} ${productAttributeModel.measureUnit}`;
+                returnString += `${productAttributeModel.label}: ${attributeValue} ${productAttributeModel.measureUnit}`;
             }
 
             return returnString;

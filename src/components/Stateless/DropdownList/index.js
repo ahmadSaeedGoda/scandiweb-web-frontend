@@ -10,12 +10,12 @@ const Dropdown = (props) => {
     }
 
     return (
-        <div>
+        <>
             <Label label={props.label} required={props.labelRequired} />
             <select 
                 name={props.name}
                 id={props.id} 
-                required={(props.required===true? "required" : null)}
+                required={props.required}
                 onChange={onChangeWrapper}
                 value={props.value}
                 className={props.className}
@@ -23,13 +23,14 @@ const Dropdown = (props) => {
                 {
                     props.options.map((option, index) => 
                         <option 
-                            value={option.value} 
-                            key={index} 
+                            value={option.value}
+                            key={index}
+                            disabled={option.isDisabled}
                         >{option.label}</option>
                     )
                 }
             </select>
-        </div>
+        </>
     );
 };
 

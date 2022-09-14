@@ -1,4 +1,5 @@
-import { productTypeRecordToDropdownOptionTransformer } from "./productTypeRecordToDropdownOption.transformer";
+import DropdownOption from "../models/DropdownOption";
+import { productTypeRecordToDropdownOptionTransformer } from "./productTypeRecordToDropdownOptionModel.transformer";
 
 export const productTypesResponseToDropdownOptionsListTransformer = productTypesResponse => {
     let dropDownOptions = productTypesResponse.map(
@@ -6,6 +7,14 @@ export const productTypesResponseToDropdownOptionsListTransformer = productTypes
             productTypeRecordToDropdownOptionTransformer(productTypeRecord)
     );
 
-    dropDownOptions.unshift({label: 'Select an Option', value: ''});
+    dropDownOptions.unshift(
+        new DropdownOption({ label: 'Type Switcher', value: '', isDisabled: true })
+    );
+    
+
+    dropDownOptions.unshift(
+        new DropdownOption({ label: '', value: '' })
+    );
+    
     return dropDownOptions;
 };
