@@ -2,20 +2,24 @@ import getBaseUrl from "./serverUrlRetriever";
 
 export async function createProductService ({ productData }) {
     try {
-        let formBody = [];
+        let basicProductProps = ['SKU', 'Name', 'Price', 'FK_ProductType', 'ProductAttributes'];
+        let requestBody = {};
+        requestBody['ProductAttributes'] = {};
         for (let property in productData) {
-          let encodedKey = encodeURIComponent(property);
-          let encodedValue = encodeURIComponent(productData[property]);
-          formBody.push(encodedKey + "=" + encodedValue);
+            if (false === basicProductProps.includes(property)) {
+                // this means the current prop is special attr/product specific
+                requestBody['ProductAttributes'][property] = productData[property];
+            } else {
+                requestBody[property] = productData[property];
+            }
         }
-        formBody = formBody.join("&");
         
         const response = await fetch(`${getBaseUrl()}/products`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                'Content-Type': 'application/json'
             },
-            body: formBody
+            body: JSON.stringify(requestBody)
         });
 
         return await response.json();
