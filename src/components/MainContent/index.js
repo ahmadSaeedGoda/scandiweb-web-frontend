@@ -35,7 +35,8 @@ const MainContent = () => {
         if (0 === destroyableIds.length) {
             return setProcessing(false);
         }
-        let requestBody = {destroyableProductsIDs: destroyableIds.join()};
+
+        let requestBody = {destroyableProductsIDs: destroyableIds};
         
         try {
             const response = await fetch(`${getBaseUrl()}/products`, {
@@ -48,9 +49,9 @@ const MainContent = () => {
 
             let body = await response.json();
 
-            if (200 !== body.code || false === body.data) {
+            if (202 !== body.code || false === body.data) {
                 alert("Ops! Something went wrong, Please try again!");
-            } else if (200 === body.code && true === body.data) {
+            } else if (202 === body.code && true === body.data) {
                 const currentProducts = productsArray.filter(
                     entry => destroyableIds.indexOf(entry.id) === -1
                 );
@@ -59,14 +60,14 @@ const MainContent = () => {
                 } else {
                     setIsEmptyProductList(true);
                 }
-                setProcessing(false);
             } else {
                 alert("Ops! Something went wrong, Please try again!");
             }
-
         } catch (error) {
             alert("Ops! Something went wrong, Please try again!");
             console.error(error);
+        } finally {
+            return setProcessing(false);
         }
     }
 
