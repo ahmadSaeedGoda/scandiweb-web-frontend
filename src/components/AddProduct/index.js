@@ -181,14 +181,40 @@ const AddProduct = () => {
                             id={attrName}
                             placeholder={`Enter Product ${typeAttributeModel.label}*`}
                             value={validatedFormData[attrName]}
-                            onChange={inputFieldChangeHandler(attrName)}
+                            onChange={
+                                inputFieldChangeHandler(
+                                    attrName,
+                                    value => ('numeric' === typeAttributeModel.backendType)?
+                                        (value * 1) // to convert the value into number
+                                        : value // otherwise keep it as is
+                                )
+                            }
                             className={formErrors[attrName] ? "inputError" : "inputBox"}
                         />
                         ;
                     // set required rules according to backend
-                    // in case of any other rules rather than required, the backend should specify. like pattern|custom
+                    // in case of any other rules the backend should specify. like pattern|custom
                     if (1 === typeAttributeModel.isRequired) {
-                        setRule(attrName, {required: {value: true, message: 'This field is required'}});
+                        setRule(
+                            attrName,
+                            {
+                                required: {value: true, message: 'This field is required'},
+                                custom: {
+                                    isValid: value => +value, // +'' will evalutate to 0
+                                    message: `${attrName} has to be of type ${typeAttributeModel.backendType}!`,
+                                }
+                            }
+                        );
+                    } else {
+                        setRule(
+                            attrName,
+                            {
+                                custom: {
+                                    isValid: value => +value, // +'' will evalutate to 0
+                                    message: `${attrName} has to be of type ${typeAttributeModel.backendType}!`,
+                                }
+                            }
+                        );
                     }
                 }
             );
