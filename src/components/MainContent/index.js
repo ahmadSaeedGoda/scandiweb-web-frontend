@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Processing from '../Stateless/Processing';
+// import Processing from '../Stateless/Processing';
 import Header from '../Stateless/Header';
 import ProductList from '../Stateless/ProductList';
 import Footer from '../Stateless/Footer';
