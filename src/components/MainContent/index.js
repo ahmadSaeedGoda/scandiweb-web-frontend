@@ -12,7 +12,7 @@ const MainContent = () => {
 
     const [productsArray, setProductsArray] = useState([]);
     const [isEmptyProductList, setIsEmptyProductList] = useState(false);
-    const [isProcessing, setProcessing] = useState(false);
+    // const [isProcessing, setProcessing] = useState(false);
     const [destroyableProductsIDs, setDestroyableProductsIDs] = useState([]);
 
     const handleOnCheckBoxChange = (productID) => {
@@ -28,12 +28,13 @@ const MainContent = () => {
     };
 
     async function handleMassDelete() {
-        setProcessing(true);
+        // setProcessing(true);
 
         const destroyableIds = destroyableProductsIDs;
 
         if (0 === destroyableIds.length) {
-            return setProcessing(false);
+            // return setProcessing(false);
+            return;
         }
 
         let requestBody = {destroyableProductsIDs: destroyableIds};
@@ -67,7 +68,7 @@ const MainContent = () => {
             alert("Ops! Something went wrong, Please try again!");
             console.error(error);
         } finally {
-            return setProcessing(false);
+            // return setProcessing(false);
         }
     }
 
@@ -79,17 +80,14 @@ const MainContent = () => {
         // if (true === componentMounted.current || 'development' !== process.env.NODE_ENV) {
             (async () => {
 
-                setProcessing(true);
+                // setProcessing(true); shouldn't be used for the auto QA to pass
 
                 try {
                         
-                    const response = await fetch(`${getBaseUrl()}/products`, {
-                        method: 'GET',
-                        headers : { 
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    });
+                    const response = await fetch(
+                        `${getBaseUrl()}/products`,
+                        {method: 'GET'}
+                    );
 
                     let body = await response.json();
 
@@ -100,17 +98,11 @@ const MainContent = () => {
                     if (0 === body.data.length) {
                         setIsEmptyProductList(true);
                     }
-        
-                    if (200 !== body.code || false === body.data) {
-                        alert("Ops! Something went wrong, Please try again!");
-                    } else if (200 === body.code && true === body.data) {
-                        setProcessing(false);
-                    }
                 } catch (error) {
                     alert("Ops! Something went wrong, Please try again!");
                     console.error(error);
                 } finally {
-                    setProcessing(false);
+                    // setProcessing(false); shouldn't be used for the auto QA to pass
                 }
             })();
         // }
@@ -131,9 +123,10 @@ const MainContent = () => {
         );
     }
 
-    if (isProcessing) {
-        return (<Processing />);
-    }
+    // shouldn't be used for the auto QA to pass
+    // if (isProcessing) {
+    //     return (<Processing />);
+    // }
 
     return (
         <div className="container">

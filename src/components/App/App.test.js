@@ -1,15 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { BrowserRouter } from 'react-router-dom';
+import {render, screen} from '@testing-library/react';
+
 import App from './App';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
+test("renders without crashing", () => {
+	render(
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	);
 });
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders ADD Button text', async () => {
+	render(
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	);
+	
+	expect(screen.getByRole('button', {name: 'ADD'})).toBeInTheDocument();
 });
