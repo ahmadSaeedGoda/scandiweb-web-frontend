@@ -51,7 +51,9 @@ Run the following command to install required dependencies.
 ```sh
 $ npm install
 ```
-Then refer to the [Available Scripts](#Available-Scripts) section for more info.
+Copy the `.env.example` file in the root directory of your project and rename it to be `.env` then change the BASE_URL respectively according to your environment.
+
+Finally refer to the [Available Scripts](#Available-Scripts) section for more info.
 
 ## Available Scripts
 
