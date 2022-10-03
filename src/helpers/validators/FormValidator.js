@@ -22,9 +22,12 @@ export const SchemeValidator = async ({ validationsScheme, data }) => {
             const custom = validationRule?.custom;
             if (custom?.isValid) {
                 if (custom.isValid.constructor.name === "AsyncFunction" ) {
-                    if (false === await custom.isValid(value)) {
+                    let responseBody = await custom.isValid(value);
+                    if (200 !== responseBody.code || true !== responseBody.data) {
                         valid = false;
-                        newErrors[key] = custom.message;
+                        for (const error in responseBody.errors) {
+                            newErrors[key] = responseBody.errors[error];
+                        }
                     }
                 } else {
                     if (!custom.isValid(value)) {

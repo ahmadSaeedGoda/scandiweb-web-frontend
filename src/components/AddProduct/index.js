@@ -33,7 +33,7 @@ const AddProduct = () => {
             sku: userInput
         });
 
-        return body.data
+        return body;
     };
 
     let handleSubmit = async () => {
@@ -54,12 +54,7 @@ const AddProduct = () => {
                 message: "Spaces and Special Characters are not allowed! Only Dashes `-` are Valid.",
             },
             custom: {
-                isValid: value => ( 6 <= value && 12 >= value),
-                message: 'The SKU Length must be between 6-12 characters!',
-            },
-            custom: {
-                isValid: async value => isValidSKU(value),
-                message: 'Duplicate SKU. The SKU is already in use, Please try again!',
+                isValid: async value => isValidSKU(value)
             },
         },
         Name: {
